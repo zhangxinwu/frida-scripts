@@ -4,14 +4,26 @@
   "description": "Example Frida agent written in TypeScript",
   "private": true,
   "main": "agent/index.ts",
+  "imports":"agent",
   "scripts": {
     "prepare": "npm run build",
-    "build": "frida-compile agent/index.ts -o _agent.js -c",
-    "watch": "frida-compile agent/index.ts -o _agent.js -w"
+    "build": "cross-env-shell frida-compile $npm_package_config_js -o _agent.js -c",
+    "watch": "cross-env-shell frida-compile $npm_package_config_js -o _agent.js -w",
+    "f": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js -f $npm_package_config_app ",
+    "F": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js -F $npm_package_config_app ",
+    "a": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js $npm_package_config_app ",
+    "p": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js -p "
   },
   "devDependencies": {
     "@types/frida-gum": "^18.1.0",
     "@types/node": "^18.0.6",
-    "frida-compile": "^15.0.8"
+    "frida-compile": "^15.0.8",
+    "cross-env": "^7.0.3"
+  },
+  "config": {
+    "connect" : "-U",
+    "app": "com.gwm.app.vehicle.center",
+    "js": "agent/com.gwm.app.vehicle.center/index.ts",
+    "debug": "-- --debug --runtime=v8"
   }
 }
