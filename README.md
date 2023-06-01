@@ -1,19 +1,19 @@
-### How to compile & load
+### How use it
 
 ```sh
-$ git clone git://github.com/oleavr/frida-agent-example.git
-$ cd frida-agent-example/
+$ git clone https://github.com/zhangxinwu/frida-scripts.git
+$ cd frida-scripts
 $ npm install
-$ frida -U -f com.example.android --no-pause -l _agent.js
-```
-
-### Development workflow
-
-To continuously recompile on change, keep this running in a terminal:
-
-```sh
 $ npm run watch
+$ npm run f
 ```
+edit package.json, change "config" for your appname and script file.
 
-And use an editor like Visual Studio Code for code completion and instant
-type-checking feedback.
+### for init android env
+```sh
+$ # start frida server
+$ adb shell /data/local/tmp/frida-server
+$ # start app in android
+$ # push so file to app.data.dir 
+$ python scripts/push_file.py
+```
