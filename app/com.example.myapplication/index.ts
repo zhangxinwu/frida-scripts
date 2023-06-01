@@ -1,7 +1,6 @@
 import { hook_native_register, hook_ArtMethodRegister, hook_RegisterNatives } from "../../agent/hook_native_register.js";
 import { vm_run } from "../../agent/QBDI/qbdi.js"
 import { getfilesdir } from "../../agent/tools.js";
-import { hook_art } from "../../agent/hook/hook_art.js";
 import { javastackstrace } from "../../agent/hook/stacktrace.js";
 
 var context: CpuContext;
@@ -10,14 +9,6 @@ var argsP: any[3] = []
 
 setImmediate(() => {
     Java.perform(() => {
-
-        hook_ArtMethodRegister();
-        hook_RegisterNatives();
-
-        // hook_art();
-
-        console.log('hello!');
-        // warp_vm_run("libdexjni1682067940.so", 0x16078, []);
         var module_name = "libnative-lib.so"
         let offset = 0xF5D4
         let baselibEncryptor = Module.findBaseAddress(module_name);
@@ -47,39 +38,9 @@ setImmediate(() => {
                     argsP[2] = args[2];
                     console.log('args 2:', a2);
                     console.log('args ', JSON.stringify([args[0], args[1], args[2]]));
-                    
-                    
-                    // getfilesdir().then((filesdir) => {
-                    //     console.log('start trace!~');
-                    //     this.ret = vm_run(vm_enter_ptr, args, filesdir + "/trace.log", this.context)
-                    //     console.log(this.ret);
-                    // })
                 },
                 onLeave: function (retval) {
                 }
-            })
-
-            //@ts-ignore 
-            if(false)
-            getfilesdir().then((filesdir) => {
-                console.log('hook cV');
-                let cV = new NativeFunction(vm_enter_ptr, 'void', ['pointer', 'pointer', 'pointer'])
-                Interceptor.replace(vm_enter_ptr, new NativeCallback((env, jclszz, arr) => {
-                    console.log('=-=')
-                    console.log(JSON.stringify(env))
-                    console.log(JSON.stringify(jclszz))
-                    console.log(JSON.stringify(arr))
-                    //@ts-ignore 
-                    var firstArg = arr.getObjectArrayElement(0);
-            
-                    // 打印第一个参数的类型和值
-                    console.log("First argument type: " + firstArg.getClass().getName());
-                    console.log("First argument value: " + firstArg.toString());
-                    console.log('=+=')
-                    vm_run(cV, [env, jclszz, arr], filesdir + "/trace.log", context)
-                    // cV(env, jobject, arr)
-                    return
-                }, 'void', ['pointer', 'pointer', 'pointer']))
             })
         }
     })
