@@ -1,4 +1,4 @@
-import { getfilesdir } from "./pushfile.js";
+import { getfilesdir } from "./tools.js";
 
 export function hook_native_register() {
     var module = Process.getModuleByName("libart.so");
@@ -49,7 +49,7 @@ export function hook_ArtMethodRegister() {
             ArtMethod_PrettyMethod = address;
         }
     }
-    getfilesdir((filesdir) => {
+    getfilesdir().then((filesdir) => {
 
         var module_libext = null;
         if (Process.arch === "arm64") {

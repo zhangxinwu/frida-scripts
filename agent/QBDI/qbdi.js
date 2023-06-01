@@ -1,12 +1,11 @@
-import { VM,InstPosition,VMAction,Options,MemoryAccessType,AnalysisType,RegisterAccessType,OperandType } from "./frida-qbdi";
+import { VM,InstPosition,VMAction,Options,MemoryAccessType,AnalysisType,RegisterAccessType,OperandType, GPR_NAMES } from "./frida-qbdi.js";
 
-export function vm_run(func_ptr, args, log_file_path) {
+export function vm_run(func_ptr, args, log_file_path, context) {
     let start_time = new Date().getTime();
 
     let vm = new VM();
     vm.setOptions(Options.OPT_DISABLE_LOCAL_MONITOR | Options.OPT_BYPASS_PAUTH | Options.OPT_ENABLE_BTI)
 
-    vm.allocateVirtualStack(vm.getGPRState(), 0x100000);
 
     console.log("log_file_path: ", log_file_path);
     let file_pointer = new File(log_file_path, "w")
@@ -17,13 +16,21 @@ export function vm_run(func_ptr, args, log_file_path) {
         "module_base": module.base,
         "module_name": module.name
     }
+    vm.allocateVirtualStack(vm.getGPRState(), 0x100000);
 
     vm.addInstrumentedModuleFromAddr(func_ptr)
     let preinst_callback = vm.newInstCallback(function (vm, gpr, fpr, data) {
         let _user_data = data;
         let inst = vm.getInstAnalysis(AnalysisType.ANALYSIS_INSTRUCTION | AnalysisType.ANALYSIS_DISASSEMBLY | AnalysisType.ANALYSIS_OPERANDS | AnalysisType.ANALYSIS_SYMBOL);
 
-        let log = "0x" + inst.address.toString(16) + " [" + inst.module + "!0x" + (inst.address - _user_data.module_base).toString(16) + "] " + inst.disassembly + "\t";
+        let i = 0;
+        // console.log(inst.instSize, inst.address);
+        let insts = '';
+        while (i < inst.instSize) {
+            i++;
+            insts += Memory.readU8(ptr(inst.address+i)).toString(16).padStart(2,'0');
+        }
+        let log = "0x" + inst.address.toString(16) + " " + insts + " [" + inst.module + "!0x" + (inst.address - _user_data.module_base).toString(16) + "] " + inst.disassembly + "\t";
         let read_regs = "";
         inst.operands.forEach(operand => {
             if (operand.regAccess == RegisterAccessType.REGISTER_READ || operand.regAccess == RegisterAccessType.REGISTER_READ_WRITE) {
@@ -106,12 +113,23 @@ export function vm_run(func_ptr, args, log_file_path) {
     vm.addCodeCB(InstPosition.PREINST, preinst_callback, user_data);
     vm.addCodeCB(InstPosition.POSTINST, postinst_callback, user_data);
     vm.addMemAccessCB(MemoryAccessType.MEMORY_READ_WRITE, memory_access_callback, user_data);
-    console.log("start vm.call");
+    // console.log("start vm.call");
+    // let gprstate = vm.getGPRState();
+    // console.log(">>>", GPR_NAMES)
+    // for(let r of GPR_NAMES) {
+    //     console.log(r, context[r.toLowerCase()])
+    //     gprstate.setRegister(r, context[r.toLowerCase()]);
+    // }
+    // vm.setGPRState(gprstate);
+    console.log("start call!");
     let ret = vm.call(func_ptr, args);
+    // let ret = vm.run(func_ptr, module.base + module.size);
     file_pointer.close();
     let end_time = new Date().getTime();
     console.log('cost is', `${(end_time - start_time)/1e3}s`)
+    console.log('ret ', ret);
     return ret;
+    // return vm.getGPRState('X0');
 }
 
 
