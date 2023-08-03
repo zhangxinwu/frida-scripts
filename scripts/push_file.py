@@ -12,11 +12,11 @@ def on_message(message, data):
     print(message)
     pass
 
-def build_agent_js(jsfile = '.\\agent\\tools.js'):
+def build_agent_js(jsfile = './agent/tools.js'):
     _agent_path = "_agent.js"
     if os.path.exists(_agent_path):
         os.remove(_agent_path)
-    os.system("frida-compile.exe -o _agent.js {}".format(jsfile))
+    os.system("frida-compile -o _agent.js {}".format(jsfile))
     
     if not os.path.exists(_agent_path):
         raise RuntimeError('frida-compile agent.js error')
@@ -34,7 +34,10 @@ if __name__ == "__main__":
     curdir = os.curdir
 
     device: frida.core.Device = frida.get_usb_device()
-    pid = device.get_frontmost_application().pid
+    if len(sys.argv) > 1:
+        pid = int(sys.argv[1])
+    else:
+        pid = device.get_frontmost_application().pid
     session: frida.core.Session = device.attach(pid)
 
     script = session.create_script(read_agent_js_source())

@@ -21,7 +21,7 @@ export async function dumpso(so_name) {
     osfix = `${filesdir}/${osfix}`
     let cmd = `${osfix} -m ${libso.base} -s ${sofile} -o ${fixsofile}`
     await exec(cmd);
-    return fixsofile;
+    return [sofile, fixsofile];
 }
 
 rpc.exports = {

@@ -18,17 +18,32 @@
   "devDependencies": {
     "@types/frida-gum": "^18.1.0",
     "@types/node": "^18.0.6",
-    "frida-compile": "^15.0.8",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "frida-compile": "^15.0.8"
   },
   "config-gwm": {
     "connect": "-H 192.168.31.51",
     "app": "com.gwm.app.vehicle.center",
     "js": "app/com.gwm.app.vehicle.center/index.ts"
   },
-  "config": {
+  "config-myapp": {
     "connect": "-U",
     "app": "com.example.myapplication",
     "js": "app/com.example.myapplication/index.ts"
+  },
+  "config-carpowerextcore": {
+    "connect": "-U",
+    "app": "com.ts.car.power.ext.core",
+    "js": "app/com.ts.car.power.ext.core/index.ts"
+  },
+  "config-neu-nagvigation": {
+    "connect": "-U",
+    "app": "com.neusoft.na.navigation",
+    "js": "app/com.neusoft.na.navigation/index.ts"
+  },
+  "config": {
+    "connect": "-U",
+    "app": "com.beantechs.account",
+    "js": "app/com.beantechs.account/index.ts"
   }
 }
