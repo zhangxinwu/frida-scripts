@@ -15,5 +15,6 @@ $ # start frida server
 $ adb shell /data/local/tmp/frida-server
 $ # start app in android
 $ # push so file to app.data.dir 
-$ python scripts/push_file.py
+$ python scripts/push_file.py [pid]
+$ python scripts/dump_so.py so_name [pid]
 ```
