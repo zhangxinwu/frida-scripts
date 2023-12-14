@@ -9,11 +9,11 @@
     "prepare": "npm run build",
     "build": "cross-env-shell frida-compile $npm_package_config_js -o _agent.js -c",
     "watch": "cross-env-shell frida-compile $npm_package_config_js -o _agent.js -w",
-    "f": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js -f $npm_package_config_app ",
-    "F": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js -F $npm_package_config_app ",
-    "a": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js $npm_package_config_app ",
-    "p": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js -p ",
-    "d": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js --debug --runtime=v8 -F $npm_package_config_app"
+    "f": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js -f $npm_package_config_app -o current.log ",
+    "F": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js -F $npm_package_config_app -o current.log ",
+    "a": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js $npm_package_config_app -o current.log ",
+    "p": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js  -o current.log -p ",
+    "d": "npm run build && cross-env-shell frida $npm_package_config_connect -l _agent.js --debug --runtime=v8 -F $npm_package_config_app  -o current.log"
   },
   "devDependencies": {
     "@types/frida-gum": "^18.1.0",
@@ -41,9 +41,14 @@
     "app": "com.neusoft.na.navigation",
     "js": "app/com.neusoft.na.navigation/index.ts"
   },
-  "config": {
+  "config-beantech-account": {
     "connect": "-U",
     "app": "com.beantechs.account",
     "js": "app/com.beantechs.account/index.ts"
+  },
+  "config": {
+    "connect": "",
+    "app": "com.xingin.xhs",
+    "js": "app/com.xingin.xhs/index.ts"
   }
 }

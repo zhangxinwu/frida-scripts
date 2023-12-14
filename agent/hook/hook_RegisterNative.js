@@ -1,5 +1,5 @@
 
-function find_RegisterNatives(params) {
+function find_RegisterNatives() {
     let symbols = Module.enumerateSymbolsSync("libart.so");
     let addrRegisterNatives = null;
     for (let i = 0; i < symbols.length; i++) {
@@ -26,7 +26,8 @@ function hook_RegisterNatives(addrRegisterNatives) {
                 console.log("[RegisterNatives] method_count:", args[3]);
                 let java_class = args[1];
                 let class_name = Java.vm.tryGetEnv().getClassName(java_class);
-                //console.log(class_name);
+                if(class_name.indexOf('xingin') < 0) return;
+                console.log(class_name);
 
                 let methods_ptr = ptr(args[2]);
 
