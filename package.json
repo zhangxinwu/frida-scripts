@@ -46,9 +46,14 @@
     "app": "com.beantechs.account",
     "js": "app/com.beantechs.account/index.ts"
   },
-  "config": {
+  "config-xhs": {
     "connect": "",
     "app": "com.xingin.xhs",
     "js": "app/com.xingin.xhs/index.ts"
+  },
+  "config": {
+    "connect": "-D 127.0.0.1:5555",
+    "app": "com.xingin.xhs",
+    "js": "app/houdini_yyb_2.19.10/index.ts"
   }
 }
