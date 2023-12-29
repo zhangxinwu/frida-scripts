@@ -2,20 +2,12 @@ function run() {
     let m = Process.findModuleByName("libhoudini.so")
     if (m) {
         let x_fetch_inst_func = m.base.add(0x1E0DF0);
-        console.log(hexdump(m.base.add(0x11ad7d)))
-        if(false)
         //@ts-ignore
-        Interceptor.attach(m.base.add(0x11ad7d), {
+        Interceptor.attach(m.base.add(0x110DCD), {
             onEnter() {
                 //@ts-ignore
                 let r13 = this.context.r13;
                 console.log("ldr ", r13, ">>", r13.readCString());
-            }
-        })
-        Interceptor.attach(m.base.add(0x11acd0), {
-            //@ts-ignore
-            onEnter(arg0, arg1, arg2){
-                console.log(arg0, arg1, arg2)
             }
         })
         if(false)

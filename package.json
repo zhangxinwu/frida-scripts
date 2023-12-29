@@ -47,13 +47,33 @@
     "js": "app/com.beantechs.account/index.ts"
   },
   "config-xhs": {
-    "connect": "",
-    "app": "com.xingin.xhs",
+    "connect": "-D 127.0.0.1:5555",
+    "app": "com.xingin1.xhs",
     "js": "app/com.xingin.xhs/index.ts"
   },
-  "config": {
+  "config-yyb": {
     "connect": "-D 127.0.0.1:5555",
     "app": "com.xingin.xhs",
     "js": "app/houdini_yyb_2.19.10/index.ts"
+  },
+  "config-mumu": {
+    "connect": "-D 127.0.0.1:7555",
+    "app": "com.xingin.xhs",
+    "js": "app/houdini_mumu/index.ts"
+  },
+  "config-qq": {
+    "connect": "-D 127.0.0.1:7555",
+    "app": "com.tencent.mobileqq",
+    "js": "app/com.tencent.mobileqq/index.ts"
+  },
+  "config": {
+    "connect": "-D 127.0.0.1:16384",
+    "app": "com.miHoYo.Yuanshen",
+    "js": "app/com.mihoyo.yuanshen/index.ts"
+  },
+  "config-yuanshen": {
+    "connect": "-D 127.0.0.1:5555",
+    "app": "com.miHoYo.Yuanshen",
+    "js": "app/com.mihoyo.yuanshen/index.ts"
   }
 }
