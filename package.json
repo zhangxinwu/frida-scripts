@@ -66,14 +66,24 @@
     "app": "com.tencent.mobileqq",
     "js": "app/com.tencent.mobileqq/index.ts"
   },
-  "config": {
-    "connect": "-D 127.0.0.1:16384",
-    "app": "com.miHoYo.Yuanshen",
+  "config-yuanshen0": {
+    "connect": "-D 127.0.0.1:16416",
+    "app": "com.xingin1.xhs",
     "js": "app/com.mihoyo.yuanshen/index.ts"
   },
   "config-yuanshen": {
     "connect": "-D 127.0.0.1:5555",
     "app": "com.miHoYo.Yuanshen",
     "js": "app/com.mihoyo.yuanshen/index.ts"
+  },
+  "config-system_server": {
+    "connect": "-D 127.0.0.1:16384",
+    "app": "system_server",
+    "js": "app/system_server/index.ts"
+  },
+  "config": {
+    "connect": "-D 127.0.0.1:7555",
+    "app": "com.miHoYo.Yuanshen",
+    "js": "app/com.mihoyo.yuanshen/lua.ts"
   }
 }

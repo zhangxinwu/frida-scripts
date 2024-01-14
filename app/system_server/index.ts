@@ -1,0 +1,47 @@
+import { javastackstrace } from "../../agent/hook/stacktrace.js";
+
+setImmediate(() => {
+    Java.perform(() => {
+        let ParsingPackageUtils = Java.use("android.content.pm.parsing.ParsingPackageUtils");
+        //@ts-ignore
+        ParsingPackageUtils.parseBaseApplication.implementation = function (arg1, arg2, arg3, arg4, arg5) {
+            javastackstrace();
+            console.log("res ", JSON.stringify(arg3));
+            console.log(`parseBaseApplication is called:  ${arg1} ${arg2} ${arg3} ${arg4} ${arg5}`)
+            let ret = this.parseBaseApplication(arg1, arg2, arg3, arg4, arg5);
+            console.log(`parseBaseApplication is called end ${ret}`)
+            return ret;
+        }
+        let TypedArray = Java.use("android.content.res.TypedArray");
+        //@ts-ignore
+        TypedArray.getInt.overload('int', 'int').implementation = function (arg1, arg2) {
+            let ss = Java.use("android.util.Log").getStackTraceString(Java.use("java.lang.Exception").$new());
+            if (`${ss}`.indexOf("parseBaseApplication") >= 0) {
+                if (arg1 == 62) {
+                    // javastackstrace();
+                    console.log("okkkk! AndroidManifestApplication_gwpAsanMode")
+                    return 1;
+                }
+            }
+            console.log(`getInt is called:  ${arg1} ${arg2}`)
+            let ret = this.getInt(arg1, arg2);
+            console.log(`getInt is called end ${ret}`)
+            return ret;
+        }
+        //@ts-ignore
+        TypedArray.getBoolean.overload('int', 'boolean').implementation = function (arg1, arg2) {
+            let ss = Java.use("android.util.Log").getStackTraceString(Java.use("java.lang.Exception").$new());
+            if (`${ss}`.indexOf("parseBaseApplication") >= 0) {
+                if (arg1 == 10) {
+                    // javastackstrace();
+                    console.log("okkkk! AndroidManifestApplication_debuggable")
+                    return true;
+                }
+            }
+            console.log(`getBoolean is called:  ${arg1} ${arg2}`)
+            let ret = this.getBoolean(arg1, arg2);
+            console.log(`getBoolean is called end ${ret}`)
+            return ret;
+        }
+    })
+})

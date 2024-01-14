@@ -91,12 +91,12 @@ export async function exec(cmd) {
     })
 }
 
-rpc.exports = {
-    chmod: chmod,
-    pushfile: pushfile,
-    pullfile: pullfile,
-    getfilesdir: getfilesdir,
-    checkfileexist: checkFileExist,
-    mkdir: mkdir,
-    exec: exec
-}
+// rpc.exports = {
+//     chmod: chmod,
+//     pushfile: pushfile,
+//     pullfile: pullfile,
+//     getfilesdir: getfilesdir,
+//     checkfileexist: checkFileExist,
+//     mkdir: mkdir,
+//     exec: exec
+// }

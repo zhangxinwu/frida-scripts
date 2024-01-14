@@ -1,139 +1,99 @@
-import { saveMaps } from "../../agent/hook/show.js";
-import { printStack, stackstrace, javastackstrace } from "../../agent/hook/stacktrace.js"
 
-let lastDrif = ptr(0);
-let lastContext: CpuContext;
+//@ts-ignore
+let getReg = null;
+let m = Process.findModuleByName("libhack.so")
+if(!m) {
+    m = Module.load("/data/local/tmp/libhack.so")
+}
+if (m) {
+    let f = m.findExportByName("_Z7getRegsi")
+    if (f)
+        getReg = new NativeFunction(f, 'pointer', ['int'])
+}
 
-let isFirst = true
-// if(0)
-setTimeout(() => {
+Process.enumerateModules().forEach(m => {
+    // if (m.path.indexOf("miHoYo") >= 0) {
+        // console.log(JSON.stringify(m))
+})
 
-    Process.setExceptionHandler((e) => {
-        saveMaps("/data/data/com.miHoYo.Yuanshen/maps")
-        if (!isFirst) return
-        isFirst = false
-        console.log("exception=>", JSON.stringify(e))
-        if (e.type == "abort") {
-            stackstrace(e.context)
-            // Java.perform(() => {
-            //     printStack("Abort->!")
-            //     javastackstrace()
-            // })
-            {
-                stackstrace(lastContext)
-                console.log(JSON.stringify(lastContext))
-                console.log(hexdump(lastContext.sp))
-                console.log(hexdump(lastContext.sp.add(0xf0)))
-                console.log(hexdump(lastContext.sp.add(0xf0).add(0xf0)))
-                // for (let i = 0; i < 0x100; i++) {
-                //     lastContext.sp = lastContext.sp.add(0x08)
-                //     try {
-                //         stackstrace(lastContext)
-                //     } catch (exception) { }
-                // }
-            }
-            console.log('=========')
-            console.log(hexdump(e.context.sp))
-            console.log(hexdump(e.context.sp.add(0xe0).readPointer()))
-            console.log(hexdump(e.context.sp.add(0xe0).readPointer().sub(0xf0)))
-            console.log(hexdump(lastDrif.sub(0xf0)))
-            console.log(hexdump(lastDrif))
-            console.log('-=-')
-            let vecStart = lastDrif.add(0xa8).readPointer()
-            let vecEnd = lastDrif.add(0xb0).readPointer()
-            let i = 0;
-            // while (!vecEnd.equals(vecStart)) {
-            //     try {
-            //         console.log("free -", i)
-            //         i += 1
-            //         console.log(hexdump(vecEnd))
-            //         // let namePtr = vecEnd.add(0x20).readPointer()
-            //         // if(!namePtr.equals(ptr(0)))
-            //         // {
-            //         //     console.log("name->")
-            //         //     console.log(hexdump(namePtr))
-            //         // }
-            //         vecEnd = vecEnd.sub(0x70)
-            //     } catch (ee) { }
-            // }
-
-            // for (let i = 0 ; i < 8; i++) {
-            //     console.log(i, "====>")
-            //     console.log(hexdump(lastDrif.add(0x90+0x8*i).readPointer()))
-            // }
-            for (let i = 0; i < 0x100; i++) {
-                try {
-                    e.context.sp = e.context.sp.add(0x08)
-                    console.log("hack!")
-                    stackstrace(e.context)
-                } catch (exception) { }
-            }
-            debugger;
-            while (1) { }
-        }
-        if (e.type == "access-violation") {
-
-            console.log(hexdump(e.context.sp))
-            console.log(hexdump(e.context.sp.add(0xf0)))
-            console.log(hexdump(e.context.sp.add(0xf0).add(0xf0)))
-
-            stackstrace(e.context)
-            for (let i = 0; i < 0x100; i++) {
-                e.context.sp = e.context.sp.add(0x08)
-                stackstrace(e.context)
-            }
-            Java.perform(() => {
-                printStack("access-violation->!")
-            })
-            while (1) { }
-        }
-    })
-    for (let m of Process.enumerateModules()) {
-        if (m.path == "/apex/com.android.runtime/lib64/bionic/libc.so") {
-            console.log(JSON.stringify(m))
-            Interceptor.attach(m.base.add(0x0485F0), {
-                onEnter(args) {
-                    stackstrace(this.context)
-                    Java.perform(() => {
-                        printStack("could->!")
-                    })
-                }
-            })
-        }
+class Range {
+    //@ts-ignore
+    constructor(start, end) {
+        //@ts-ignore
+        this.start = start
+        //@ts-ignore
+        this.end = end
     }
-    Interceptor.attach(Process.getModuleByName("libOpenglSystemCommon.so")!.base.add(0x29820), {
-        onEnter(args) {
-            console.log("ProgramData::~ProgramData ", args[0])
-            //@ts-ignore
-            // lastDrif = this.context.rdi
-            lastContext = this.context
+}
+//@ts-ignore
+let ranges = []
+
+let maps = new File('/proc/self/maps', 'r')
+while(true) {
+    let line = maps.readLine()
+    if (!line)
+        break
+    console.log(line)
+    if (line.indexOf("miHoYo") >= 0 || line.indexOf("arm") >= 0) {
+        line.split(" ").forEach(e => {
+            if (e.indexOf("-") >= 0) {
+                let r = new Range(parseInt(e.split("-")[0], 16), parseInt(e.split("-")[1], 16))
+                ranges.push(r)
+            }
+        })
+    }
+}
+//@ts-ignore
+console.log(JSON.stringify(ranges))
+
+function showArmStack(tid:number) {
+    //@ts-ignore
+    let regs = getReg(tid);
+    let pcs = []
+    let opcs = []
+    if (!regs.equals(0)) {
+        console.log("" + tid, regs)
+        for (let i = 0; i < 32; i++) {
+            // console.log('x'+i, regs.add(0x8*i).readPointer())
         }
-    })
-    Interceptor.attach(Process.getModuleByName("libOpenglSystemCommon.so")!.base.add(0x21D60), {
-        onEnter(args) {
-            //@ts-ignore
-            console.log("ProgramData::initProgramWithDataStream ", this.context.rdi)
-            // stackstrace(this.context)
-            // Java.perform(() => {
-            //     printStack("initProgramWithDataStream->!")
-            // })
+        let fp = regs.add(0x8 * 29)
+        pcs.push(regs.add(0x8 * 30).readPointer())
+        opcs.push(regs.add(0x8 * 30).readPointer())
+        {
+            let fp0 = fp
+            while (fp0 > 0) {
+                try {
+                    opcs.push(fp0.add(0x8).readPointer())
+                    fp0 = fp0.readPointer()
+                } catch (e) {
+                    break
+                }
+            }
+            console.log("acc", opcs)
         }
-    })
+        for (let i = 0; i < 0x1000; i++) {
+            fp = fp.add(0x8)
+            try {
 
-    Interceptor.attach(Process.getModuleByName("libc.so")!.base.add(0x48CA0), {
-        onEnter() {
-            console.log("scudo::reportHeaderCorruption ")
-            console.log(JSON.stringify(this.context))
-            //@ts-ignore
-            lastDrif = this.context.rdi
-            stackstrace(this.context)
-            console.log('cc Stackstrace called from:\n' + Thread.backtrace(this.context, Backtracer.FUZZY).map(DebugSymbol.fromAddress).join('\n') + '\n');
-
-            Java.perform(() => {
-                printStack("scudo::reportHeaderCorruption->!")
-            })
+                //@ts-ignore
+                for (let r of ranges) {
+                    let pc = fp.readPointer()
+                    if (pc >= r.start && pc < r.end) {
+                        pcs.push(pc)
+                        break
+                    }
+                }
+            } catch (e) {
+                break
+            }
         }
-    })
-
-
-}, 1000)
+        console.log('fuz', pcs)
+        // console.log(hexdump(sp))
+    }
+}
+//@ts-ignore
+export function printArmStack() {
+    //@ts-ignore
+    Process.enumerateThreads().forEach(t => showArmStack(t.id))
+    showArmStack(Process.getCurrentThreadId())
+}
