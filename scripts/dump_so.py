@@ -31,7 +31,9 @@ def remove_agent_js():
 
 
 def main(origin_so_name):
+    print('start dump', origin_so_name)
     retf = script.exports_sync.dumpso(origin_so_name)
+    print('ret->', retf)
     sofile = retf[0]
     fixsofile = retf[1]
     if sofile:

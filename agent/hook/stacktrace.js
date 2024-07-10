@@ -1,5 +1,7 @@
 export function stackstrace(context) {
-    console.log('Stackstrace called from:\n' + Thread.backtrace(context, Backtracer.FUZZY).map(DebugSymbol.fromAddress).join('\n') + '\n');
+    console.log(Process.getCurrentThreadId(), 'Stackstrace called from:\n' + Thread.backtrace(context, Backtracer.FUZZY).map(DebugSymbol.fromAddress).join('\n') + '\n');
+    console.log('++++++++++++++++')
+    console.log(Process.getCurrentThreadId(), 'Stackstrace called from:\n' + Thread.backtrace(context, Backtracer.ACCURATE).map(DebugSymbol.fromAddress).join('\n') + '\n');
 }
 
 

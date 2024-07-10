@@ -76,14 +76,142 @@
     "app": "com.miHoYo.Yuanshen",
     "js": "app/com.mihoyo.yuanshen/index.ts"
   },
-  "config-system_server": {
-    "connect": "-D 127.0.0.1:16384",
+  "config-system-server": {
+    "connect": "-D ll:16416",
     "app": "system_server",
     "js": "app/system_server/index.ts"
   },
-  "config": {
+  "config-yuanshenlua": {
     "connect": "-D 127.0.0.1:7555",
     "app": "com.miHoYo.Yuanshen",
     "js": "app/com.mihoyo.yuanshen/lua.ts"
+  },
+  "config-aos": {
+    "connect": "-D ll:16384",
+    "app": "com.yjmgames.bladex.aos",
+    "js": "app/com.yjmgames.bladex.aos/index.ts"
+  },
+  "config-dnf": {
+    "connect": "-D ll:16448",
+    "app": "com.tencent.tmgp.dnf",
+    "js": "app/com.tencent.tmgp.dnf/index.ts"
+  },
+  "config-cod": {
+    "connect": "-D ll:16448",
+    "app": "com.activision.callofduty.warzone",
+    "js": "app/com.activision.callofduty.warzone/index.ts"
+  },
+  "config-and": {
+    "connect": "-D ll:16416",
+    "app": "com.valorlegend.and.cn",
+    "js": "app/com.valorlegend.and.cn/index.ts"
+  },
+  "config": {
+    "connect": "-D ll:16480",
+    "app": "com.tencent.xfight",
+    "js": "app/com.tencent.xfight/index_stack.ts"
+  },
+  "config-fsandroid": {
+    "connect": "-D ll:16480",
+    "app": "com.nomoga.fsandroid",
+    "js": "app/com.nomoga.fsandroid/index.ts"
+  },
+  "config-h": {
+    "connect": "-D ll:16416",
+    "app": "com.yjmgames.bladex.aos",
+    "js": "app/houdini_mumu/crash_stack.ts"
+  },
+  "config-xsh": {
+    "connect": "-D ll:16480",
+    "app": "com.xingin.xhs",
+    "js": "app/com.xingin.xhs/mumu_hide.ts"
+  },
+  "config-st-m": {
+    "connect": "-D 127.0.0.1:16480",
+    "app": "com.martian.tmst.tp",
+    "js": "app/com.martian.tmst.tp/index.ts"
+  },
+  "config-st-z": {
+    "connect": "-D 70c8720d",
+    "app": "com.martian.tmst.tp",
+    "js": "app/com.martian.tmst.tp/index_z.ts"
+  },
+  "config-jyt": {
+    "connect": "-D 127.0.0.1:16448",
+    "app": "com.xm4399.jyt.gb",
+    "js": "app/com.xm4399.jyt.gb/index.ts"
+  },
+  "config-wsj": {
+    "connect": "-D 127.0.0.1:16480",
+    "app": "com.shenyou.gfg.twsj",
+    "js": "app/com.shenyou.gfg.twsj/index.ts"
+  },
+  "config-chaos": {
+    "connect": "-D localhost:16416",
+    "app": "com.yunbu.arkcraft2.chaos",
+    "js": "app/com.yunbu.arkcraft2.chaos/index.ts"
+  },
+  "config-party": {
+    "connect": "-D ll:16384",
+    "app": "com.netease.party.wyzymnqsd_cps",
+    "js": "app/com.netease.party.wyzymnqsd_cps/index.ts"
+  },
+  "config-mtt": {
+    "connect": "-D ll:16384",
+    "app": "com.tencent.mtt",
+    "js": "app/com.tencent.mtt/index.ts"
+  },
+  "config-skland": {
+    "connect": "-D localhost:16416",
+    "app": "com.hypergryph.skland",
+    "js": "app/com.hypergryph.skland/index.ts"
+  },
+  "config-hh-yyb": {
+    "connect": "-D 127.0.0.1:5555",
+    "app": "com.xingin1.xhs",
+    "js": "app/com.xingin.xhs/houdini_yyb.ts"
+  },
+  "config-sd-mumu": {
+    "connect": "-D 127.0.0.1:16448",
+    "app": "com.netease.sdsbq",
+    "js": "app/com.netease.sdsbq/index.ts"
+  },
+  "config-sd-d": {
+    "connect": "-D 70c8720d",
+    "app": "com.netease.sdsbq",
+    "js": "app/com.netease.sdsbq/dd.ts"
+  },
+  "config-douyin": {
+    "connect": "-D ll:16384",
+    "app": "com.ss.android.ugc.aweme",
+    "js": "app/com.ss.android.ugc.aweme/index-w.ts"
+  },
+  "config-jcc": {
+    "connect": "-D 70c8720d",
+    "app": "com.tencent.jkchess",
+    "js": "app/com.tencent.jkchess/index.ts"
+  },
+  "config-bili": {
+    "connect": "-D 127.0.0.1:16416",
+    "app": "tv.danmaku.bili",
+    "js": "app/tv.danmaku.bili/index.ts"
+  },
+  "config-d-douyin": {
+    "connect": "-D 70c8720d",
+    "app": "com.ss.android.ugc.aweme",
+    "js": "app/com.ss.android.ugc.aweme/index-d.ts"
+  },
+  "config-360": {
+    "connect": "-D 127.0.0.1:16480",
+    "app": "com.qihoo.appstore",
+    "js": "app/com.qihoo.appstore/index.ts"
+  },
+  "config-yuanshen3": {
+    "connect": "-D 127.0.0.1:16384",
+    "app": "com.miHoYo.Yuanshen",
+    "js": "app/com.miHoYo.Yuanshen/index3.ts"
+  },
+  "dependencies": {
+    "js-base64": "^3.7.7"
   }
 }
